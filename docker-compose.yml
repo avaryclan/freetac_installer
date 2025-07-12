@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  freetak-server:
+    build: .
+    container_name: freetak-server
+    restart: unless-stopped
+    ports:
+      - "8087:8087"   # TCP COT
+      - "8089:8089"   # SSL COT
+      - "9000:9000"   # Federation
+      - "19023:19023" # REST API
+      - "5000:5000"   # Web UI
+      - "1880:1880"   # NodeRed
+      - "8000:8000"   # NodeRed WebUI
+      - "9997:9997"   # Video Server
+      - "64738:64738" # Voice Server (Mumble)
+    volumes:
+      - ./data:/opt/FreeTAKServer/data
+      - ./logs:/opt/FreeTAKServer/logs
+      - ./config:/opt/FreeTAKServer/config
+    environment:
+      - FTS_IP=0.0.0.0
+      - FTS_PORT=8087
+      - FTS_SSL_PORT=8089
+      - FTS_FEDERATION_PORT=9000
+      - FTS_API_PORT=19023
+      - FTS_UI_PORT=5000
+      - FTS_NODERED_PORT=1880
+      - FTS_VIDEO_PORT=9997
+      - FTS_VOICE_PORT=64738
+    networks:
+      - freetak-network
+
+  # Дополнительный сервис для видеосервера (MediaMTX)
+  video-server:
+    image: aler9/mediamtx:latest
+    container_name: freetak-video-server
+    restart: unless-stopped
+    ports:
+      - "9997:9997"
+      - "8888:8888"  # Web UI для MediaMTX
+    volumes:
+      - ./video-config:/mediamtx
+    networks:
+      - freetak-network
+
+  # Дополнительный сервис для голосового сервера (Mumble)
+  voice-server:
+    image: mumblevoip/mumble-server:latest
+    container_name: freetak-voice-server
+    restart: unless-stopped
+    ports:
+      - "64738:64738/udp"
+      - "64738:64738/tcp"
+    environment:
+      - MUMBLE_SUPERUSER_PASSWORD=your_superuser_password
+      - MUMBLE_SERVER_PASSWORD=your_server_password
+    volumes:
+      - ./mumble-data:/data
+    networks:
+      - freetak-network
+
+networks:
+  freetak-network:
+    driver: bridge 

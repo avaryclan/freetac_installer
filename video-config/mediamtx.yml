@@ -1,0 +1,39 @@
+# MediaMTX Configuration for FreeTAK Server
+
+# API settings
+api: yes
+apiAddress: :8888
+
+# RTMP settings
+rtmp: yes
+rtmpAddress: :1935
+
+# RTSP settings
+rtsp: yes
+rtspAddress: :8554
+
+# HLS settings
+hls: yes
+hlsAddress: :8889
+hlsAlwaysRemux: yes
+
+# WebRTC settings
+webrtc: yes
+webrtcAddress: :8889
+
+# Path settings
+paths:
+  all:
+    runOnDemand: ffmpeg -i rtsp://localhost:8554/$path -c copy -f rtsp rtsp://localhost:8554/$path
+    runOnDemandRestart: yes
+    runOnDemandCloseAfter: 10s
+
+# Log settings
+logLevel: info
+logDestinations: [stdout]
+
+# Authentication (optional)
+# authentication:
+#   method: basic
+#   user: admin
+#   pass: password 
