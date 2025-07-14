@@ -34,7 +34,7 @@ services:
 
   # Дополнительный сервис для видеосервера (MediaMTX)
   video-server:
-    image: mediamtx/mediamtx:latest
+    image: bluenviron/mediamtx:latest
     container_name: freetak-video-server
     restart: unless-stopped
     ports:
