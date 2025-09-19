@@ -40,6 +40,10 @@ RUN pip install --user -r requirements.txt
 # Установка FreeTAK Server как пакет
 RUN pip install --user -e .
 
+# Создание __init__.py файлов для правильной работы модулей
+RUN touch /opt/FreeTAKServer/FreeTAKServer/__init__.py
+RUN touch /opt/FreeTAKServer/FreeTAKServer/controllers/__init__.py
+
 # Создание конфигурационных файлов
 RUN mkdir -p /opt/FreeTAKServer/config
 

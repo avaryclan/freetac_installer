@@ -51,9 +51,23 @@ echo "API Port: $FTS_API_PORT"
 echo "UI Port: $FTS_UI_PORT"
 
 # Запуск основного сервиса
-python3 -c "
-import sys
-sys.path.insert(0, '/opt/FreeTAKServer/FreeTAKServer')
-from FreeTAKServer.controllers.FTS import main
-main()
-" 
+cd /opt/FreeTAKServer/FreeTAKServer
+
+# Попробуем разные способы запуска
+if [ -f "FreeTAKServer/controllers/FTS.py" ]; then
+    echo "Запуск через FTS.py..."
+    python3 FreeTAKServer/controllers/FTS.py
+elif [ -f "FreeTAKServer/controllers/FTS/__main__.py" ]; then
+    echo "Запуск через __main__.py..."
+    python3 -m FreeTAKServer.controllers.FTS
+else
+    echo "Поиск альтернативных способов запуска..."
+    find . -name "*.py" -path "*/controllers/*" | head -5
+    echo "Попытка запуска через main.py..."
+    if [ -f "main.py" ]; then
+        python3 main.py
+    else
+        echo "Ошибка: не найден способ запуска FreeTAK Server"
+        exit 1
+    fi
+fi 
