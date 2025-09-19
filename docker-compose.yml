@@ -28,7 +28,6 @@ services:
       - FTS_UI_PORT=5000
       - FTS_NODERED_PORT=1880
       - FTS_VIDEO_PORT=9997
-      - FTS_VOICE_PORT=64738
     networks:
       - freetak-network
 
@@ -41,7 +40,7 @@ services:
       - "9997:9997"
       - "8888:8888"  # Web UI для MediaMTX
     volumes:
-      - ./video-config:/mediamtx
+      - ./video-config/mediamtx.yml:/mediamtx/mediamtx.yml:ro
     networks:
       - freetak-network
 
