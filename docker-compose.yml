@@ -11,10 +11,6 @@ services:
       - "9000:9000"   # Federation
       - "19023:19023" # REST API
       - "5000:5000"   # Web UI
-      - "1880:1880"   # NodeRed
-      - "8000:8000"   # NodeRed WebUI
-      - "9997:9997"   # Video Server
-      - "64738:64738" # Voice Server (Mumble)
     volumes:
       - ./data:/opt/FreeTAKServer/data
       - ./logs:/opt/FreeTAKServer/logs
@@ -26,8 +22,6 @@ services:
       - FTS_FEDERATION_PORT=9000
       - FTS_API_PORT=19023
       - FTS_UI_PORT=5000
-      - FTS_NODERED_PORT=1880
-      - FTS_VIDEO_PORT=9997
     networks:
       - freetak-network
 
@@ -51,13 +45,11 @@ services:
       - "64739:64738/udp"
       - "64739:64738/tcp"
     environment:
-      - MUMBLE_SUPERUSER_PASSWORD=your_superuser_password
-      - MUMBLE_SERVER_PASSWORD=your_server_password
-    volumes:
-      - ./mumble-data:/data
+      - MUMBLE_SUPERUSER_PASSWORD=changeme123
+      - MUMBLE_SERVER_PASSWORD=changeme456
     networks:
       - freetak-network
 
 networks:
   freetak-network:
-    driver: bridge 
+    driver: bridge
