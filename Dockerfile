@@ -42,7 +42,10 @@ RUN pip install --user -e .
 
 # Создание __init__.py файлов для правильной работы модулей
 RUN touch /opt/FreeTAKServer/FreeTAKServer/__init__.py
-RUN touch /opt/FreeTAKServer/FreeTAKServer/controllers/__init__.py
+
+# Проверим структуру FreeTAK Server и создадим нужные __init__.py файлы
+RUN find /opt/FreeTAKServer/FreeTAKServer -type d -name "*controller*" -o -name "*Controller*" | head -10
+RUN find /opt/FreeTAKServer/FreeTAKServer -name "*.py" | grep -i controller | head -10
 
 # Создание конфигурационных файлов
 RUN mkdir -p /opt/FreeTAKServer/config

@@ -53,21 +53,24 @@ echo "UI Port: $FTS_UI_PORT"
 # Запуск основного сервиса
 cd /opt/FreeTAKServer/FreeTAKServer
 
-# Попробуем разные способы запуска
-if [ -f "FreeTAKServer/controllers/FTS.py" ]; then
-    echo "Запуск через FTS.py..."
-    python3 FreeTAKServer/controllers/FTS.py
-elif [ -f "FreeTAKServer/controllers/FTS/__main__.py" ]; then
-    echo "Запуск через __main__.py..."
-    python3 -m FreeTAKServer.controllers.FTS
+echo "Поиск способов запуска FreeTAK Server..."
+echo "Структура директории:"
+ls -la
+
+echo "Поиск Python файлов:"
+find . -name "*.py" | head -10
+
+echo "Поиск файлов с FTS:"
+find . -name "*FTS*" -o -name "*fts*" | head -10
+
+# Попробуем запустить через main.py если он есть
+if [ -f "main.py" ]; then
+    echo "Запуск через main.py..."
+    python3 main.py
+elif [ -f "FreeTAKServer.py" ]; then
+    echo "Запуск через FreeTAKServer.py..."
+    python3 FreeTAKServer.py
 else
-    echo "Поиск альтернативных способов запуска..."
-    find . -name "*.py" -path "*/controllers/*" | head -5
-    echo "Попытка запуска через main.py..."
-    if [ -f "main.py" ]; then
-        python3 main.py
-    else
-        echo "Ошибка: не найден способ запуска FreeTAK Server"
-        exit 1
-    fi
+    echo "Попытка запуска через python -m FreeTAKServer..."
+    python3 -m FreeTAKServer
 fi 
