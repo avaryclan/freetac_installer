@@ -39,8 +39,6 @@ services:
     ports:
       - "9997:9997"
       - "8888:8888"  # Web UI для MediaMTX
-    volumes:
-      - ./video-config/mediamtx.yml:/mediamtx/mediamtx.yml:ro
     networks:
       - freetak-network
 
@@ -50,8 +48,8 @@ services:
     container_name: freetak-voice-server
     restart: unless-stopped
     ports:
-      - "64738:64738/udp"
-      - "64738:64738/tcp"
+      - "64739:64738/udp"
+      - "64739:64738/tcp"
     environment:
       - MUMBLE_SUPERUSER_PASSWORD=your_superuser_password
       - MUMBLE_SERVER_PASSWORD=your_server_password
