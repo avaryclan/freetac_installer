@@ -10,7 +10,26 @@ cd /opt/FreeTAKServer/FreeTAKServer
 # Проверка наличия конфигурационного файла
 if [ ! -f "/opt/FreeTAKServer/config/config.py" ]; then
     echo "Создание конфигурационного файла..."
-    cp config.py /opt/FreeTAKServer/config/
+    if [ -f "config.py" ]; then
+        cp config.py /opt/FreeTAKServer/config/
+    else
+        echo "Создание базового конфигурационного файла..."
+        cat > /opt/FreeTAKServer/config/config.py << 'EOF'
+# FreeTAK Server Configuration
+import os
+
+# Basic configuration
+FTS_IP = os.getenv('FTS_IP', '0.0.0.0')
+FTS_PORT = int(os.getenv('FTS_PORT', 8087))
+FTS_SSL_PORT = int(os.getenv('FTS_SSL_PORT', 8089))
+FTS_FEDERATION_PORT = int(os.getenv('FTS_FEDERATION_PORT', 9000))
+FTS_API_PORT = int(os.getenv('FTS_API_PORT', 19023))
+FTS_UI_PORT = int(os.getenv('FTS_UI_PORT', 5000))
+
+# Logging
+LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
+EOF
+    fi
 fi
 
 # Установка переменных окружения
@@ -32,4 +51,9 @@ echo "API Port: $FTS_API_PORT"
 echo "UI Port: $FTS_UI_PORT"
 
 # Запуск основного сервиса
-python3 -m FreeTAKServer.controllers.FTS 
+python3 -c "
+import sys
+sys.path.insert(0, '/opt/FreeTAKServer/FreeTAKServer')
+from FreeTAKServer.controllers.FTS import main
+main()
+" 

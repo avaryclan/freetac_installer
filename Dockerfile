@@ -37,6 +37,9 @@ RUN git clone https://github.com/FreeTAKTeam/FreeTAKServer.git
 WORKDIR /opt/FreeTAKServer/FreeTAKServer
 RUN pip install --user -r requirements.txt
 
+# Установка FreeTAK Server как пакет
+RUN pip install --user -e .
+
 # Создание конфигурационных файлов
 RUN mkdir -p /opt/FreeTAKServer/config
 
