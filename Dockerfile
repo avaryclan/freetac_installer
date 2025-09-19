@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.11-slim-bookworm
 
 # Установка переменных окружения
 ENV DEBIAN_FRONTEND=noninteractive
@@ -10,7 +10,6 @@ RUN apt-get update && apt-get install -y \
     curl \
     wget \
     unzip \
-    software-properties-common \
     apt-transport-https \
     ca-certificates \
     gnupg \
