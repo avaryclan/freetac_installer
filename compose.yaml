@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  freetakserver:
+    image: ghcr.io/freetakteam/freetakserver:latest
+    container_name: freetakserver
+    restart: unless-stopped
+    ports:
+      - "8087:8087"   # TCP COT
+      - "8089:8089"   # SSL COT
+      - "9000:9000"   # Federation
+      - "19023:19023" # REST API
+    volumes:
+      - ./data:/opt/FreeTAKServer/data
+      - ./logs:/opt/FreeTAKServer/logs
+      - ./config:/opt/FreeTAKServer/config
+    environment:
+      - FTS_IP=0.0.0.0
+      - FTS_PORT=8087
+      - FTS_SSL_PORT=8089
+      - FTS_FEDERATION_PORT=9000
+      - FTS_API_PORT=19023
+    networks:
+      - freetak-network
+
+  freetakserver-ui:
+    image: ghcr.io/freetakteam/ui:latest
+    container_name: freetakserver-ui
+    restart: unless-stopped
+    ports:
+      - "5000:5000"   # Web UI
+    volumes:
+      - ./ui-data:/opt/
+    environment:
+      - FTS_SERVER_HOST=freetakserver
+      - FTS_SERVER_PORT=19023
+      - FTS_IP=freetakserver
+      - FTS_API_PORT=19023
+      - FTS_UI_EXPOSED_IP=0.0.0.0
+      - FTS_COT_PORT=8087
+      - FTS_SSL_COT_PORT=8089
+      - FTS_FED_PORT=9000
+      - FTS_USER_ADDRESS=freetakserver
+    networks:
+      - freetak-network
+    depends_on:
+      - freetakserver
+
+networks:
+  freetak-network:
+    driver: bridge
